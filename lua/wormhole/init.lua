@@ -1,10 +1,9 @@
 local home_dir = require("plenary").path.path.home
-local ssh = require("wormhole.ssh")
 
-local defaults = {
+local M = {}
+
+M.options = {
   ssh = {
-    explorer_provider = "netrw",
-    port = 22,
     config_path = home_dir .. "/.ssh/config",
   },
   sync = {
@@ -12,13 +11,8 @@ local defaults = {
   },
 }
 
-local M = {}
-
 function M.setup(opts)
-  opts = vim.tbl_deep_extend("force", defaults, opts or {})
-  local hosts = ssh.parse_config(opts.ssh.config_path)
+  M.options = vim.tbl_deep_extend("force", M.options, opts or {})
 end
-
-M.setup()
 
 return M
