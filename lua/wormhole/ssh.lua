@@ -91,7 +91,24 @@ M.explore_files = function(host, path)
   end
 
   if not path then
-    path = vim.fn.input("Enter path to explore: ")
+    vim.ui.input({
+      prompt = "Enter path to explore: ",
+    }, function(input)
+      if input then
+        path = input
+        -- check if oil.nvim is installed and use oil-ssh, if not fall back to scp (netrw)
+        local oil_installed = pcall(require, "oil")
+        if oil_installed then
+          local adapter = "oil-ssh"
+          local oil = require("oil")
+          oil.open(string.format("%s://%s//%s", adapter, host, path))
+        else
+          local adapter = "scp"
+          vim.cmd(string.format("%s://%s//%s", adapter, host, path))
+        end
+      end
+    end)
+    return
   end
 
   -- check if oil.nvim is installed and use oil-ssh, if not fall back to scp (netrw)
