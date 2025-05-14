@@ -104,7 +104,7 @@ M.explore_files = function(host, path)
           oil.open(string.format("%s://%s//%s", adapter, host, path))
         else
           local adapter = "scp"
-          vim.cmd(string.format("%s://%s//%s", adapter, host, path))
+          vim.cmd(string.format("edit %s://%s/%s", adapter, host, path))
         end
       end
     end)
