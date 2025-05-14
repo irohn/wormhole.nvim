@@ -81,11 +81,11 @@ local required_plugins = {
     info = "(Required for oil-ssh.)",
   },
   {
-    name = "telescope.nvim",
-    url = "https://github.com/nvim-telescope/telescope.nvim",
-    lib = "telescope",
+    name = "snacks.nvim",
+    url = "https://github.com/folke/snacks.nvim",
+    lib = "snacks",
     optional = true,
-    info = "(Required for telescope integration.)",
+    info = "(Optional for 'vim.ui.select'.)",
   },
 }
 
