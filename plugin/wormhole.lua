@@ -2,10 +2,22 @@ local wh = require("wormhole")
 local ssh = require("wormhole.ssh")
 
 local cmd_function = function(opts)
-  if opts.args == "ssh" then
+  if not opts.args or opts.args == "" then
+    -- Show help or default behavior when no arguments are provided
+    print("Usage: Wormhole [ssh|explore]")
+    return
+  elseif opts.args == "explore" then
+    ssh.select_host(wh.options.ssh.config_path, function(choice)
+      ssh.explore_files(choice)
+    end)
+  elseif opts.args == "ssh" then
     ssh.select_host(wh.options.ssh.config_path, function(choice)
       ssh.spawn_terminal(choice)
     end)
+  else
+    -- Handle unknown arguments
+    print("Unknown command: " .. opts.args)
+    print("Available commands: ssh, explore")
   end
 end
 

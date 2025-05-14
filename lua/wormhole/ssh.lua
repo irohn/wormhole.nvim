@@ -84,4 +84,26 @@ M.spawn_terminal = function(host)
   vim.cmd("startinsert")
 end
 
+M.explore_files = function(host, path)
+  if not host then
+    vim.notify("No host provided", vim.log.levels.ERROR)
+    return
+  end
+
+  if not path then
+    path = vim.fn.input("Enter path to explore: ")
+  end
+
+  -- check if oil.nvim is installed and use oil-ssh, if not fall back to scp (netrw)
+  local oil_installed = pcall(require, "oil")
+  if oil_installed then
+    local adapter = "oil-ssh"
+    local oil = require("oil")
+    oil.open(string.format("%s://%s//%s", adapter, host, path))
+  else
+    local adapter = "scp"
+    vim.cmd(string.format("%s://%s//%s", adapter, host, path))
+  end
+end
+
 return M
