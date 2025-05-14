@@ -63,27 +63,22 @@ M.spawn_terminal = function(host)
 
   local term_cmd = string.format("ssh %s", host)
 
-  local width = math.floor(vim.o.columns * 0.8)
-  local height = math.floor(vim.o.lines * 0.8)
-  local buf = vim.api.nvim_create_buf(false, true)
+  -- Create a new buffer
+  vim.cmd("new")
 
-  local opts = {
-    relative = "editor",
-    width = width,
-    height = height,
-    col = math.floor((vim.o.columns - width) / 2),
-    row = math.floor((vim.o.lines - height) / 2),
-    style = "minimal",
-    border = "rounded"
-  }
+  -- Get the current buffer
+  local buf = vim.api.nvim_get_current_buf()
 
-  local win = vim.api.nvim_open_win(buf, true, opts)
+  -- Set buffer name
+  vim.api.nvim_buf_set_name(buf, "ssh://" .. host)
 
+  -- Run the terminal command in the buffer
   ---@diagnostic disable-next-line: param-type-mismatch
   local ok, err = pcall(vim.cmd, string.format("terminal %s", term_cmd))
   if not ok then
     vim.notify("Failed to spawn terminal: " .. err, vim.log.levels.ERROR)
-    vim.api.nvim_win_close(win, true)
+    vim.cmd("bdelete!")
+    return
   end
 
   vim.cmd("startinsert")
