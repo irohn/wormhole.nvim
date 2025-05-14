@@ -6,9 +6,6 @@ M.options = {
   ssh = {
     config_path = home_dir .. "/.ssh/config",
   },
-  sync = {
-    program = "rsync",
-  },
 }
 
 function M.setup(opts)
